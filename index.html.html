@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오시 보석함 · 명예의 전당</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#171228;--card:#241c40cc;--line:#3a2f60;--txt:#f3eeff;--dim:#bcb0e0;--faint:#8076ad;
+    --rose:#ff9fb6;--gold:#ffd98a;--amethyst:#c79cf2;--mint:#7ee0c0;--aqua:#86c8ff;--pearl:#f3e9ff;--fire:#ff7a4d;
+    --display:"Jua",sans-serif;--body:"Gowun Dodum",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);color:var(--txt);min-height:100vh;
+    background:radial-gradient(700px 380px at 85% -8%,#5a3a7a55,transparent 60%),
+      radial-gradient(620px 360px at 5% 4%,#7a456355,transparent 58%),
+      radial-gradient(500px 500px at 50% 110%,#2c5a6e44,transparent 60%),var(--bg);
+    padding:20px 14px 60px;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(1.5px 1.5px at 20% 30%,#fff8,transparent),
+      radial-gradient(1.5px 1.5px at 70% 20%,#ffd98a99,transparent),
+      radial-gradient(1px 1px at 40% 70%,#fff6,transparent),
+      radial-gradient(1.5px 1.5px at 85% 60%,#c79cf299,transparent),
+      radial-gradient(1px 1px at 55% 45%,#fff5,transparent),
+      radial-gradient(1.5px 1.5px at 12% 80%,#7ee0c099,transparent);opacity:.6}
+  .wrap{max-width:440px;margin:0 auto;position:relative;z-index:1}
+  h1{font-family:var(--display);font-size:28px;line-height:1.1;text-align:center;
+     background:linear-gradient(120deg,var(--gold),var(--rose) 45%,var(--amethyst));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{text-align:center;color:var(--dim);font-size:12.5px;margin:6px 0 16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:17px 16px;margin-bottom:14px;backdrop-filter:blur(8px);box-shadow:0 12px 40px -18px #000,inset 0 1px 0 #ffffff14}
+  .ptitle{font-family:var(--display);font-size:15px;color:var(--pearl);margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .ptitle small{font-family:var(--body);color:var(--faint);font-size:11px;font-weight:400}
+  .mechip{display:flex;gap:7px;flex-wrap:wrap}
+  .mechip button{font-family:var(--body);font-size:12px;color:var(--dim);background:#ffffff0c;border:1px solid var(--line);border-radius:30px;padding:6px 12px;cursor:pointer;transition:.15s}
+  .mechip button.on{background:linear-gradient(135deg,var(--gold),var(--rose));color:#231a2e;border-color:transparent;font-weight:700}
+  .hero{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,#3a1f2e,#2a1c44);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px;position:relative;overflow:hidden}
+  .hero.risk{border-color:#ff7a4d88;box-shadow:0 0 0 1px #ff7a4d44,0 0 30px -8px #ff7a4d66}
+  .flame{font-size:46px;filter:drop-shadow(0 0 12px var(--fire));animation:fl 1.6s ease-in-out infinite}
+  .flame.cold{filter:grayscale(1) brightness(.7);animation:none}
+  @keyframes fl{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08) rotate(2deg)}}
+  .herotxt{flex:1}
+  .herotxt .big{font-family:var(--display);font-size:24px;color:#fff;line-height:1}
+  .herotxt .big span{color:var(--fire)}
+  .herotxt .msg{font-size:12px;color:var(--dim);margin-top:3px}
+  .herotxt .msg.warn{color:var(--fire);font-weight:700}
+  .shield{font-size:11px;color:var(--aqua);margin-top:2px}
+  .today{background:#ffffff0a;border:1px dashed var(--line);border-radius:14px;padding:11px 13px;margin-bottom:12px}
+  .today .tt{font-size:12.5px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .today .tt b{font-family:var(--display);color:var(--gold)}
+  .tdots{display:flex;gap:8px}
+  .tdot{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;font-size:11px;border-radius:10px;padding:7px 4px;background:#ffffff08;border:1px solid #ffffff12;color:var(--faint)}
+  .tdot.done{background:linear-gradient(135deg,#7ee0c033,#86c8ff22);border-color:var(--mint);color:var(--mint);font-weight:700}
+  .lossmsg{font-size:11px;color:var(--fire);margin-top:8px;text-align:center;font-weight:700}
+  .meter{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:4px 0 12px}
+  .slot{aspect-ratio:1;border-radius:8px;background:#ffffff0a;border:1px solid #ffffff12;display:flex;align-items:center;justify-content:center;transition:.2s}
+  .slot.fill{background:linear-gradient(160deg,#ffffff22,#ffffff05);border-color:#ffffff30}
+  .slot.near{animation:near 1s ease-in-out infinite}
+  @keyframes near{0%,100%{box-shadow:0 0 0 0 #ffd98a00}50%{box-shadow:0 0 14px 2px #ffd98a88}}
+  .gem{width:62%;height:62%;clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);background:linear-gradient(160deg,var(--g1),var(--g2));box-shadow:0 0 10px var(--g1);position:relative;animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+  .gem::after{content:"";position:absolute;top:8%;left:18%;width:30%;height:30%;background:#fffc;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);opacity:.8}
+  @keyframes pop{0%{transform:scale(0) rotate(-30deg);opacity:0}100%{transform:scale(1);opacity:1}}
+  .nearmsg{text-align:center;font-family:var(--display);color:var(--gold);font-size:14px;margin-bottom:10px;animation:bob 1s infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .gemrow{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:12px}
+  .gemrow b{font-family:var(--display);color:var(--gold);font-size:20px}
+  .boxchip{display:flex;align-items:center;gap:7px;background:#ffffff10;border:1px solid var(--line);padding:6px 12px;border-radius:30px}
+  .boxchip .n{font-family:var(--display);color:var(--rose);font-size:17px}
+  .stats{display:flex;gap:8px;font-size:11px;color:var(--faint);margin-bottom:12px;flex-wrap:wrap}
+  .stats span{background:#ffffff08;border:1px solid #ffffff10;border-radius:20px;padding:4px 10px}
+  .stats b{color:var(--dim);font-family:var(--display)}
+  .tool{display:flex;align-items:center;gap:10px;background:#ffffff0a;border:1px solid var(--line);border-radius:14px;padding:10px 13px;margin-bottom:10px}
+  .tool .ti{font-size:26px}.tool .tn{font-family:var(--display);font-size:14px;color:var(--pearl)}.tool .td{color:var(--faint);font-size:11px}
+  .btn{width:100%;border:0;border-radius:16px;padding:15px 0;font-family:var(--display);font-size:16px;cursor:pointer;color:#231a2e;transition:.15s}
+  .btn:active{transform:translateY(1px)}
+  .btn-open{background:linear-gradient(135deg,var(--gold),var(--rose));box-shadow:0 10px 26px -8px var(--rose);position:relative;overflow:hidden}
+  .btn-open:disabled{background:#332a52;color:var(--faint);box-shadow:none;cursor:default}
+  .btn-open:not(:disabled)::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,#ffffff80,transparent);animation:shine 2.4s infinite}
+  @keyframes shine{0%{left:-60%}55%{left:140%}100%{left:140%}}
+  .hint{font-size:11.5px;color:var(--faint);text-align:center;margin-top:10px;line-height:1.6}
+  .social{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12.5px;color:var(--dim);background:#ffffff08;border:1px solid #ffffff12;border-radius:30px;padding:9px;margin-bottom:14px}
+  .social b{font-family:var(--display);color:var(--mint)}
+  .hist{display:flex;flex-direction:column;gap:8px}
+  .hist .empty{color:var(--faint);font-size:12.5px;text-align:center;padding:8px 0}
+  .hrow{display:flex;align-items:center;gap:11px;background:#ffffff08;border:1px solid #ffffff10;border-radius:13px;padding:9px 12px}
+  .hrow .ic{font-size:21px}.hrow .nm{font-size:13.5px;flex:1}
+  .hrow .rb{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid var(--rc);color:var(--rc)}
+  .hof{display:flex;flex-direction:column;gap:8px}
+  .mrow{display:grid;grid-template-columns:26px 1fr auto;gap:11px;align-items:center;background:#ffffff08;border:1px solid #ffffff12;border-radius:14px;padding:11px 13px;transition:.4s}
+  .mrow.me{background:linear-gradient(100deg,#ffd98a22,#ff9fb622);border-color:#ffd98a66}
+  .mrk{font-family:var(--display);font-size:15px;color:var(--faint);text-align:center}.mrow.me .mrk{color:var(--gold)}
+  .mnm{font-size:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .tierbadge{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--tc);color:var(--tc);background:#0003}
+  .vipbadge{font-size:10px;padding:2px 8px;border-radius:20px;background:linear-gradient(135deg,var(--gold),var(--rose));color:#231a2e;font-weight:700}
+  .mstreak{font-size:11px;color:var(--fire)}
+  .mgem{font-family:var(--display);font-size:15px;color:var(--pearl);display:flex;align-items:center;gap:4px}
+  .mgem small{font-family:var(--body);font-size:10px;color:var(--faint)}
+  .legend{display:flex;flex-wrap:wrap;gap:7px 12px;justify-content:center;margin-top:14px;font-size:10.5px;color:var(--dim)}
+  .legend span{display:flex;align-items:center;gap:5px}.ld{width:9px;height:9px;border-radius:3px;transform:rotate(45deg)}
+  .src{font-size:10.5px;color:var(--faint);text-align:center;line-height:1.7;margin-top:8px}
+  .live{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;margin-left:4px}
+  .live.on{background:#7ee0c022;color:var(--mint);border:1px solid var(--mint)}
+  .live.off{background:#ffffff10;color:var(--faint);border:1px solid var(--line)}
+  .overlay{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 40%,#2a1d44ee,#110c1ff7);display:none;align-items:center;justify-content:center;flex-direction:column;backdrop-filter:blur(6px)}
+  .overlay.on{display:flex}
+  .smashzone{position:relative;width:240px;height:240px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+  .crate{font-size:120px;filter:drop-shadow(0 14px 34px #ff9fb677);transition:transform .08s}
+  .crate.hit{animation:hit .18s}
+  @keyframes hit{0%{transform:scale(1.12) rotate(-5deg)}50%{transform:scale(.9) rotate(5deg)}100%{transform:scale(1)}}
+  .cracks{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:120px;color:#0008;pointer-events:none;opacity:0}
+  .hpbar{width:170px;height:9px;border-radius:20px;background:#ffffff1a;overflow:hidden;margin-top:8px}
+  .hpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));transition:width .15s;border-radius:20px}
+  .smashtip{font-family:var(--display);color:var(--pearl);font-size:16px;margin-top:14px;text-align:center}
+  .smashtip small{display:block;font-family:var(--body);color:var(--faint);font-size:11px;margin-top:4px}
+  .reveal{text-align:center;animation:rin .6s cubic-bezier(.2,1.5,.4,1)}
+  @keyframes rin{0%{transform:scale(.2) translateY(40px);opacity:0}100%{transform:scale(1);opacity:1}}
+  .reveal .ric{font-size:96px;filter:drop-shadow(0 0 28px var(--rc))}
+  .reveal .grade{font-family:var(--display);font-size:14px;letter-spacing:3px;color:var(--rc);margin:10px 0 4px}
+  .reveal .rname{font-family:var(--display);font-size:26px;color:#fff;margin-bottom:6px}
+  .reveal .rdesc{font-size:13px;color:var(--dim);margin-bottom:22px}
+  .closebtn{font-family:var(--display);font-size:15px;color:#231a2e;background:linear-gradient(135deg,var(--gold),var(--rose));border:0;border-radius:14px;padding:13px 40px;cursor:pointer}
+  .pity{font-size:11px;color:var(--gold);margin-top:13px}.luck{font-size:11px;color:var(--amethyst);margin-top:6px}
+  .spark,.shard{position:absolute;pointer-events:none;opacity:0}.spark{width:8px;height:8px;border-radius:50%}.shard{width:14px;height:14px;border-radius:3px}
+  @keyframes burst{0%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0) rotate(var(--rot))}}
+  /* PIN 모달 */
+  .pinbox{width:280px;background:linear-gradient(160deg,#2a2046,#211a3a);border:1px solid var(--line);border-radius:22px;padding:24px 22px;text-align:center;box-shadow:0 24px 60px -20px #000;animation:rin .4s cubic-bezier(.2,1.4,.4,1)}
+  .pintitle{font-family:var(--display);font-size:18px;color:var(--pearl)}
+  .pinsub{font-size:12px;color:var(--dim);margin:8px 0 16px;line-height:1.5}
+  .pinin{width:100%;text-align:center;font-family:var(--display);font-size:26px;letter-spacing:10px;color:#fff;background:#ffffff0d;border:1px solid var(--line);border-radius:14px;padding:13px 0;outline:none}
+  .pinin:focus{border-color:var(--gold);box-shadow:0 0 0 2px #ffd98a44}
+  .pinerr{min-height:16px;font-size:11.5px;color:var(--fire);margin-top:8px;font-weight:700}
+  .pinbtns{display:flex;gap:9px;margin-top:8px}
+  .pinbtns button{flex:1;font-family:var(--display);font-size:14px;border:0;border-radius:13px;padding:12px 0;cursor:pointer}
+  .pincancel{background:#ffffff12;color:var(--dim)}
+  .pinok{background:linear-gradient(135deg,var(--gold),var(--rose));color:#231a2e}
+  .pinok:disabled{opacity:.5;cursor:default}
+  .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,#fff,#ffe9c8);color:#3a2a1a;font-family:var(--display);font-size:14px;padding:12px 22px;border-radius:30px;box-shadow:0 12px 30px -8px #000a;opacity:0;transition:.35s;z-index:60;pointer-events:none;max-width:80vw;text-align:center}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>✨ 오시 보석함 ✨</h1>
+  <div class="sub">인증이 시트에 쌓이면 보석이 자동으로 차요 💎 <span id="livechip" class="live off">샘플 데이터</span></div>
+
+  <div class="panel">
+    <div class="ptitle">👤 내 계정 <small id="acctsub">보고 싶은 닉네임을 골라요 (보기는 누구나)</small></div>
+    <div class="mechip" id="mechip"></div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">💎 내 보석함</div>
+    <div class="hero" id="hero">
+      <div class="flame" id="flame">🔥</div>
+      <div class="herotxt">
+        <div class="big"><span id="streakN">0</span>일 연속</div>
+        <div class="msg" id="streakMsg">매일 인증으로 불씨를 지켜요</div>
+        <div class="shield" id="shieldMsg"></div>
+      </div>
+    </div>
+    <div class="today">
+      <div class="tt"><span>⏳ 오늘의 보석</span><span><b id="todayN">0</b> / 3</span></div>
+      <div class="tdots" id="tdots"></div>
+      <div class="lossmsg" id="lossmsg"></div>
+    </div>
+    <div class="nearmsg" id="nearmsg" style="display:none">딱 1개만 더 모으면 선물상자예요! ✨</div>
+    <div class="meter" id="meter"></div>
+    <div class="gemrow">
+      <div>쓸 수 있는 보석 <b id="gemN">0</b> <span style="color:var(--faint)">/ 10</span></div>
+      <div class="boxchip">🎁 선물상자 <span class="n" id="boxN">0</span>개</div>
+    </div>
+    <div class="stats"><span>시즌 번 보석 <b id="earned">0</b></span><span>쓴 보석 <b id="spent">0</b></span></div>
+    <div class="tool" id="toolbox"></div>
+    <button class="btn btn-open" id="open" disabled>🎁 선물상자 깨기</button>
+    <div class="hint">걷기 7천보·운동·독서 = 각 보석 1개 (하루 카테고리당 1개)<br><b style="color:var(--mint)">많이가 아니라 꾸준히</b> · 하루 빠져도 보호막 1회로 연속 유지</div>
+  </div>
+
+  <div class="social" id="social"></div>
+
+  <div class="panel">
+    <div class="ptitle">🌟 최근 획득</div>
+    <div class="hist" id="hist"></div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">👑 명예의 전당 <small>누적 보석 = 보석 등급</small></div>
+    <div class="hof" id="hof"></div>
+    <div class="legend">
+      <span><i class="ld" style="background:var(--gold)"></i>다이아몬드</span>
+      <span><i class="ld" style="background:var(--amethyst)"></i>자수정</span>
+      <span><i class="ld" style="background:var(--aqua)"></i>아쿠아마린</span>
+      <span><i class="ld" style="background:var(--pearl)"></i>진주</span>
+      <span><i class="ld" style="background:var(--mint)"></i>새싹</span>
+    </div>
+    <div class="src">📊 출처: 보리 인증 시트 · 뱃지 = 보석함_회원 탭</div>
+  </div>
+</div>
+
+<div class="overlay" id="ov"><div id="stage"></div></div>
+<div class="overlay" id="pinov"><div class="pinbox">
+  <div class="pintitle">🔒 보석함 PIN 확인</div>
+  <div class="pinsub" id="pinsub"></div>
+  <input class="pinin" id="pinin" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="••••">
+  <div class="pinerr" id="pinerr"></div>
+  <div class="pinbtns"><button class="pincancel" id="pincancel">취소</button><button class="pinok" id="pinok">확인</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ▼ 연결 설정 — 둘 다 같은 시트를 가리킵니다.
+   CSV_URL : 인증기록 탭 gviz CSV (명예의전당·연속·오늘의보석 = 읽기, PIN 불필요)
+   API_URL : Apps Script 웹앱 /exec (상자 깨기 = PIN 인증·서버 RNG, 단일 원본)
+   - 둘 다 비우면 → 샘플 모드 (claude.ai 미리보기는 외부 fetch 차단이라 자동 샘플)
+   - CSV_URL만 채우면 → 읽기 전용 라이브 (상자깨기는 'API 연동 대기')  ← Step1
+   - 둘 다 채우면 → 풀 라이브 (PIN 상자깨기까지)                       ← Step2
+   추천 CSV: https://docs.google.com/spreadsheets/d/시트ID/gviz/tq?tqx=out:csv&sheet=인증기록
+   ============================================================ */
+const CSV_URL = "";
+const API_URL = "";
+
+const STEP_THRESHOLD = 7000;
+const GEMS_PER_BOX = 10;
+const SEASON_START = "2026-06-01";
+// 인증기록 컬럼 인덱스 (0=A열) — 보리봇 v5.7.4: A날짜시간 B닉네임 C종류 D회차 E운동종목 F운동량 G날짜
+const COL = { DATETIME:0, NAME:1, KIND:2, COUNT:3, SPORT:4, AMOUNT:5, DATE:6 };
+
+/* 샘플: 실제 9컬럼 포맷 그대로 (헤더 + 이모지닉 + 콤마수치 + 미달걷기 + 취소행 테스트) */
+const SAMPLE_CSV =
+`날짜시간,닉네임,종류,회차,운동종목,운동량,날짜,요일,주차
+2026-06-01 09:12,비개인하늘,운동,1회,러닝,10km,2026-06-01,월,23
+2026-06-01 07:40,하프맨🏃,운동,1회,운동,30분,2026-06-01,월,23
+2026-06-01 21:03,럭키가잉🏆👑,걷기,,걷기,"7,000보",2026-06-01,월,23
+2026-06-01 12:00,마포이봉주,운동,1회,운동,41분,2026-06-01,월,23
+2026-06-01 22:10,중딩워커,걷기,,걷기,"13,210보",2026-06-01,월,23
+2026-06-01 20:00,희망,걷기,,걷기,"12,395보",2026-06-01,월,23
+2026-06-02 08:00,하프맨🏃,운동,1회,운동,30분,2026-06-02,화,23
+2026-06-02 21:00,럭키가잉🏆👑,걷기,,걷기,"7,000보",2026-06-02,화,23
+2026-06-02 19:00,희망,걷기,,걷기,"9,800보",2026-06-02,화,23
+2026-06-03 18:00,열박🌄완주왕,운동,1회,러닝,5km,2026-06-03,수,23
+2026-06-03 07:00,하프맨🏃,운동,1회,운동,30분,2026-06-03,수,23
+2026-06-03 12:00,마포이봉주,운동,1회,운동,30분,2026-06-03,수,23
+2026-06-03 20:00,희망,걷기,,걷기,"15,671보",2026-06-03,수,23
+2026-06-03 22:00,중딩워커,걷기,,걷기,"18,419보",2026-06-03,수,23
+2026-06-03 21:00,럭키가잉🏆👑,걷기,,걷기,"7,000보",2026-06-03,수,23
+2026-06-04 21:00,럭키가잉🏆👑,걷기,,걷기,"7,000보",2026-06-04,목,23
+2026-06-04 22:00,중딩워커,걷기,,걷기,"11,295보",2026-06-04,목,23
+2026-06-04 07:00,하프맨🏃,운동,1회,운동,28분,2026-06-04,목,23
+2026-06-04 07:30,하프맨🏃,운동_취소,0,운동,28분,2026-06-04,목,23
+2026-06-04 18:00,열박🌄완주왕,걷기,,걷기,"8,100보",2026-06-04,목,23
+2026-06-05 08:00,하프맨🏃,걷기,,걷기,"10,396보",2026-06-05,금,23
+2026-06-05 19:00,뭉치,걷기,,걷기,"13,383보",2026-06-05,금,23
+2026-06-05 12:00,마포이봉주,운동,1회,운동,80분,2026-06-05,금,23
+2026-06-05 21:00,희망,독서,,독서,,2026-06-05,금,23
+2026-06-05 21:00,럭키가잉🏆👑,걷기,,걷기,"7,000보",2026-06-05,금,23
+2026-06-06 06:00,열박🌄완주왕,운동,1회,걷뛰,8km,2026-06-06,토,23
+2026-06-06 07:00,하프맨🏃,운동,1회,운동,32분,2026-06-06,토,23
+2026-06-06 21:00,럭키가잉🏆👑,걷기,,걷기,"7,000보",2026-06-06,토,23
+2026-06-06 20:00,희망,걷기,,걷기,"8,200보",2026-06-06,토,23
+2026-06-06 22:00,중딩워커,걷기,,걷기,"5,100보",2026-06-06,토,23`;
+/* 샘플 전용 뱃지(라이브에선 보석함_회원 탭에서 읽음) */
+const DEMO_BADGE={"럭키가잉":true,"하프맨":true,"희망":true,"열박":true};
+
+const REWARDS=[
+ {grade:"S",name:"메가커피 기프티콘",icon:"☕",prob:0.012,rarity:"legendary",desc:"걸어준 나에게 주는 선물 ☕"},
+ {grade:"S",name:"조각케이크 기프티콘",icon:"🍰",prob:0.008,rarity:"legendary",desc:"오늘만큼은 달콤하게 🍰"},
+ {grade:"A",name:"보너스 보석 +5",icon:"💎",prob:0.030,rarity:"rare",gems:5,desc:"보석함이 한가득! +5"},
+ {grade:"A",name:"다음 시즌 보증금 -3천",icon:"🎫",prob:0.030,rarity:"rare",desc:"다음 시즌 살짝 가볍게"},
+ {grade:"A",name:"꽃 스티커팩",icon:"🌷",prob:0.020,rarity:"rare",desc:"채팅에 꽃을 뿌려요"},
+ {grade:"B",name:"보석 +2",icon:"💠",prob:0.100,rarity:"uncommon",gems:2,desc:"보석 두 알 추가 +2"},
+ {grade:"B",name:"응원 뱃지",icon:"✨",prob:0.070,rarity:"uncommon",desc:"프로필에 반짝 한 줄"},
+ {grade:"B",name:"미니 칭호",icon:"🌿",prob:0.050,rarity:"uncommon",desc:"꾸준러 인증"},
+ {grade:"C",name:"오늘의 명언",icon:"💌",prob:0.300,rarity:"common",desc:"마음 데워주는 한 문장"},
+ {grade:"C",name:"응원 한마디",icon:"🫧",prob:0.220,rarity:"common",desc:"누군가의 따뜻한 말"},
+ {grade:"C",name:"격려 메시지",icon:"🌱",prob:0.180,rarity:"common",desc:"내일도 가볍게, 또 하나"},
+];
+const RC={legendary:"var(--gold)",rare:"var(--amethyst)",uncommon:"var(--mint)",common:"var(--aqua)"};
+const RL={legendary:"전설",rare:"희귀",uncommon:"고급",common:"일반"};
+const ICONMAP={};REWARDS.forEach(r=>ICONMAP[r.name]={icon:r.icon,desc:r.desc});
+const GEMCOLORS=[["#ffd98a","#ff9fb6"],["#c79cf2","#86c8ff"],["#7ee0c0","#86c8ff"],["#ff9fb6","#c79cf2"],["#86c8ff","#7ee0c0"]];
+const TOOLS={basic:{icon:"🔨",name:"망치",hp:5,luck:1.0,desc:"5번 때리면 깨져요"},
+  vip:{icon:"🪓",name:"도끼",hp:3,luck:1.5,desc:"3번이면 깨짐 · 전설 확률 ×1.5 (정회원 로열티)"}};
+const TIERS=[{name:"다이아몬드",min:80,c:"var(--gold)",ic:"💎"},{name:"자수정",min:50,c:"var(--amethyst)",ic:"💜"},
+  {name:"아쿠아마린",min:30,c:"var(--aqua)",ic:"💠"},{name:"진주",min:15,c:"var(--pearl)",ic:"🤍"},{name:"새싹",min:0,c:"var(--mint)",ic:"🌱"}];
+const tierOf=t=>{for(const x of TIERS)if(t>=x.min)return x;return TIERS[4];};
+const CATLABEL={walk:"🚶 걷기",ex:"💪 운동",study:"📖 독서"};
+
+/* ---------- 파싱 유틸 ---------- */
+// 닉네임 정규화: 이모지·칭호 제거, 앞쪽 한글/영숫자 토큰만
+function canonName(n){const m=String(n||"").trim().match(/^[0-9A-Za-z가-힣ㄱ-ㅎㅏ-ㅣ]+/);return m?m[0]:String(n||"").trim();}
+// 따옴표 안의 콤마를 보존하는 CSV 파서 ("7,000보" 안 깨짐)
+function parseCSV(text){
+  const rows=[];let row=[],cur="",q=false;
+  for(let i=0;i<text.length;i++){const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+    else { if(ch==='"')q=true; else if(ch===','){row.push(cur);cur="";}
+      else if(ch==='\n'){row.push(cur);rows.push(row);row=[];cur="";}
+      else if(ch==='\r'){} else cur+=ch; } }
+  if(cur!==""||row.length){row.push(cur);rows.push(row);}
+  return rows;
+}
+// 날짜 정규화: 'yyyy-MM-dd HH:mm' / 'yyyy-MM-dd' / gviz 'Date(y,m,d)' 모두 → 'yyyy-MM-dd'
+function normDate(v){v=String(v||"").trim();
+  const m=v.match(/^Date\((\d+),(\d+),(\d+)/);
+  if(m){const y=+m[1],mo=(+m[2])+1,d=+m[3];return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
+  return v.slice(0,10);}
+function dnum(d){const m=String(d||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return null;return Date.UTC(+m[1],+m[2]-1,+m[3])/86400000;}
+function kstTodayNum(){const k=new Date(Date.now()+9*3600*1000);return Date.UTC(k.getUTCFullYear(),k.getUTCMonth(),k.getUTCDate())/86400000;}
+function parseSteps(v){const s=String(v||"").replace(/,/g,"").trim();if(s.indexOf("보")>-1||s.indexOf("걸음")>-1)return parseInt(s,10)||0;return null;}
+function scoreCat(c){c=String(c||"");if(c.indexOf("걷")>-1)return"walk";if(c.indexOf("운동")>-1)return"ex";if(/독서|공부|필사/.test(c))return"study";return null;}
+
+/* ---------- CSV → 회원별 인증 집계 (취소 차감) ---------- */
+function computeFromCSV(csv){
+  const rows=parseCSV(csv);const users={};let maxDay=0;
+  rows.forEach(r=>{
+    let dstr=normDate(r[COL.DATE]); if(!/^\d{4}-\d{2}-\d{2}$/.test(dstr)) dstr=normDate(r[COL.DATETIME]);
+    const day=dnum(dstr); if(day===null) return;          // 헤더·이상행 스킵
+    if(dstr<SEASON_START) return;
+    const name=canonName(r[COL.NAME]); if(!name) return;
+    const rawKind=String(r[COL.KIND]||"");
+    const isCancel=rawKind.indexOf("_취소")>-1;
+    const sc=scoreCat(rawKind.replace("_취소","")); if(!sc) return;
+    if(!isCancel){
+      const valid=sc==="walk" ? (parseSteps(r[COL.AMOUNT])!==null && parseSteps(r[COL.AMOUNT])>=STEP_THRESHOLD) : true;
+      if(!valid) return;
+    }
+    const u=users[name]||(users[name]={keys:new Set()});
+    const key=dstr+"|"+sc;
+    if(isCancel)u.keys.delete(key); else u.keys.add(key);
+    if(day>maxDay)maxDay=day;
+  });
+  for(const n in users){const u=users[n];u.days=new Set();u.byday={};
+    u.keys.forEach(k=>{const p=k.split("|"),dy=dnum(p[0]);u.days.add(dy);(u.byday[dy]=u.byday[dy]||new Set()).add(p[1]);});
+    u.earned=u.keys.size;}
+  const today=CSV_URL?kstTodayNum():maxDay;
+  let social=0;for(const n in users){if(users[n].byday[today])social++;}
+  return {users,today,social};
+}
+function streakInfo(daysSet,today){
+  const todayDone=daysSet.has(today);
+  let start=todayDone?today:(daysSet.has(today-1)?today-1:null);
+  if(start===null)return{streak:0,atRisk:false,todayDone:false,shield:false};
+  let cur=0,day=start,shield=false;
+  while(true){if(daysSet.has(day)){cur++;day--;}
+    else if(!shield&&daysSet.has(day-1)){shield=true;day-=2;}else break;}
+  return{streak:cur,atRisk:!todayDone,todayDone,shield};
+}
+
+/* ---------- 상태 ---------- */
+let DATA={users:{},today:0,social:0};  // CSV 기반(행동설계 + HOF 베이스)
+let API={};                            // ME별 서버 state 캐시 {name:{earned,spent,remain,boxes,vip,registered}}
+let HOFAPI=null;                       // 서버 hof (있으면 우선)
+let LIVE_CSV=false, LIVE_API=false;
+let ME="";
+const histByUser={};                   // 세션 표시용 최근 획득(원본은 뽑기기록 시트)
+const demoSpent={}, demoBonus={};       // 샘플 모드 전용
+
+const $=id=>document.getElementById(id);
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200);}
+
+function vipOf(n){ if(LIVE_API&&API[n])return!!API[n].vip; return !!DEMO_BADGE[n]; }
+function myTool(){return vipOf(ME)?TOOLS.vip:TOOLS.basic;}
+// 경제(보석/상자) — 라이브는 서버, 샘플은 클라 계산
+function econ(){
+  if(LIVE_API&&API[ME])return API[ME];
+  const earned=(DATA.users[ME]?DATA.users[ME].earned:0)+(demoBonus[ME]||0);
+  const remain=earned-(demoSpent[ME]||0)*GEMS_PER_BOX;
+  return {earned,spent:(demoSpent[ME]||0)*GEMS_PER_BOX,remain,
+    boxes:Math.floor(remain/GEMS_PER_BOX),gauge:((remain%GEMS_PER_BOX)+GEMS_PER_BOX)%GEMS_PER_BOX,
+    vip:vipOf(ME),registered:false};
+}
+
+/* ---------- 서버 통신 ---------- */
+async function fetchState(name){
+  if(!API_URL)return null;
+  try{const r=await fetch(API_URL+"?action=state&user="+encodeURIComponent(name));
+    if(r.ok){const j=await r.json();if(j&&j.ok){API[name]=j;if(j.hof)HOFAPI=j.hof;}return j;}}catch(e){console.warn(e);}
+  return null;
+}
+async function openLive(name,pin){
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({action:"open",user:name,pin:pin})});
+  return await r.json();
+}
+
+/* ---------- 렌더 ---------- */
+function renderChips(){
+  const names=Object.keys(DATA.users).sort((a,b)=>(DATA.users[b].earned)-(DATA.users[a].earned));
+  const c=$("mechip");c.innerHTML="";
+  names.forEach(n=>{const b=document.createElement("button");b.className=(n===ME?"on":"");
+    b.innerHTML=n+(vipOf(n)?" 👑":"");
+    b.onclick=async()=>{ME=n;if(LIVE_API&&!API[n]){await fetchState(n);}renderAll();};c.appendChild(b);});
+}
+function renderStreak(){
+  const u=DATA.users[ME];const si=u?streakInfo(u.days,DATA.today):{streak:0};
+  $("streakN").textContent=si.streak;
+  const hero=$("hero"),flame=$("flame"),msg=$("streakMsg"),sh=$("shieldMsg");
+  hero.classList.toggle("risk",!!si.atRisk);flame.classList.toggle("cold",si.streak===0);
+  if(si.streak===0){msg.className="msg";msg.textContent="오늘 첫 인증으로 불씨를 지펴요 🔥";}
+  else if(si.atRisk){msg.className="msg warn";msg.textContent="⚠️ 오늘 인증 안 하면 연속이 끊겨요!";}
+  else{msg.className="msg";msg.textContent="오늘 완료! 내일도 이어가요 💪";}
+  sh.textContent=si.shield?"🛡️ 보호막으로 하루 공백을 메웠어요":"";
+}
+function renderToday(){
+  const u=DATA.users[ME];const cats=(u&&u.byday[DATA.today])?u.byday[DATA.today]:new Set();
+  $("todayN").textContent=cats.size;
+  const d=$("tdots");d.innerHTML="";
+  ["walk","ex","study"].forEach(k=>{const done=cats.has(k);const el=document.createElement("div");
+    el.className="tdot"+(done?" done":"");el.innerHTML=(done?"✅ ":"")+CATLABEL[k];d.appendChild(el);});
+  $("lossmsg").textContent=cats.size<3?"오늘 안 받은 보석은 내일이면 사라져요 — 지금 인증!":"오늘 보석 풀 획득! 완벽해요 🎉";
+}
+function renderBox(){
+  const e=econ();const gauge=e.gauge,boxes=e.boxes;
+  const m=$("meter");m.innerHTML="";
+  for(let i=0;i<10;i++){const s=document.createElement("div");
+    s.className="slot"+(i<gauge?" fill":"")+((gauge>=8&&i===gauge)?" near":"");
+    if(i<gauge){const g=document.createElement("div");g.className="gem";const c=GEMCOLORS[i%5];g.style.setProperty("--g1",c[0]);g.style.setProperty("--g2",c[1]);s.appendChild(g);}
+    m.appendChild(s);}
+  $("nearmsg").style.display=(gauge>=8&&boxes<1)?"block":"none";
+  $("gemN").textContent=gauge;$("boxN").textContent=boxes;
+  $("earned").textContent=e.earned;$("spent").textContent=e.spent;
+  const t=myTool();
+  $("toolbox").innerHTML=`<div class="ti">${t.icon}</div><div><div class="tn">${t.name} ${vipOf(ME)?'<span class="vipbadge">정회원</span>':''}</div><div class="td">${t.desc}</div></div>`;
+  const btn=$("open");
+  if(LIVE_CSV&&!LIVE_API){ btn.disabled=true; btn.textContent="🎁 보상 연동 준비중 (Step2)"; }
+  else { btn.disabled=boxes<1; btn.textContent="🎁 선물상자 깨기"; }
+}
+function renderSocial(){$("social").innerHTML=`👥 오늘 인증한 멤버 <b>${DATA.social}명</b> · 같이 걷는 중이에요!`;}
+function renderHist(){
+  const h=$("hist"),list=histByUser[ME]||[];
+  if(!list.length){h.innerHTML='<div class="empty">아직 깬 상자가 없어요. 보석 10개를 모아보세요!</div>';return;}
+  h.innerHTML="";list.slice(0,6).forEach(r=>{const row=document.createElement("div");row.className="hrow";row.style.setProperty("--rc",RC[r.rarity]);
+    row.innerHTML=`<div class="ic">${r.icon}</div><div class="nm">${r.name}</div><div class="rb">${RL[r.rarity]}</div>`;h.appendChild(row);});
+}
+function hofList(){
+  const base=Object.keys(DATA.users).map(n=>({name:n,total:DATA.users[n].earned,vip:vipOf(n),streak:streakInfo(DATA.users[n].days,DATA.today).streak}));
+  if(HOFAPI){const m={};HOFAPI.forEach(h=>m[h.name]=h);
+    base.forEach(b=>{if(m[b.name]){b.total=m[b.name].total;b.vip=!!m[b.name].vip;}});}
+  return base.sort((a,b)=>b.total-a.total);
+}
+function renderHof(){
+  const list=hofList();const el=$("hof");el.innerHTML="";
+  list.forEach((m,i)=>{const t=tierOf(m.total);const row=document.createElement("div");row.className="mrow"+(m.name===ME?" me":"");row.style.setProperty("--tc",t.c);
+    row.innerHTML=`<div class="mrk">${i+1}</div>
+      <div class="mnm">${m.name}${m.name===ME?" (나)":""} <span class="tierbadge">${t.ic} ${t.name}</span>${m.vip?'<span class="vipbadge">정회원</span>':''}${m.streak>=2?`<span class="mstreak">🔥${m.streak}</span>`:''}</div>
+      <div class="mgem">💎 ${m.total} <small>보석</small></div>`;el.appendChild(row);});
+}
+function renderAll(){renderChips();renderStreak();renderToday();renderBox();renderSocial();renderHist();renderHof();}
+
+/* ---------- 뽑기 (샘플 클라 RNG) ---------- */
+function pickReward(pity,luck){
+  let pool=REWARDS.map(r=>({...r}));
+  if(pity)pool=pool.filter(r=>r.rarity==="legendary"||r.rarity==="rare");
+  else if(luck>1)pool=pool.map(r=>r.rarity==="legendary"?{...r,prob:r.prob*luck}:r);
+  const total=pool.reduce((s,r)=>s+r.prob,0);let x=Math.random()*total,c=0;
+  for(const r of pool){c+=r.prob;if(x<=c)return r;}return pool[pool.length-1];
+}
+
+/* ---------- 깨기 버튼 ---------- */
+$("open").onclick=()=>{
+  if(econ().boxes<1)return;
+  if(LIVE_API){ openPinPrompt(); }
+  else { // 샘플 모드: PIN 없이 미리보기
+    demoSpent[ME]=(demoSpent[ME]||0)+1;renderBox();
+    const tool=myTool(),pity=(demoSpent[ME]%10===0),reward=pickReward(pity,tool.luck);
+    startSmash(reward,tool,pity,false);
+  }
+};
+
+/* ---------- PIN 모달 ---------- */
+let pinBusy=false;
+function openPinPrompt(){
+  $("pinsub").textContent=`${ME} 님, 상자를 깨려면 PIN을 입력해 주세요`;
+  $("pinin").value="";$("pinerr").textContent="";$("pinok").disabled=false;
+  $("pinov").classList.add("on");setTimeout(()=>$("pinin").focus(),50);
+}
+function closePinPrompt(){$("pinov").classList.remove("on");}
+$("pincancel").onclick=closePinPrompt;
+$("pinin").addEventListener("keydown",e=>{if(e.key==="Enter")$("pinok").click();});
+$("pinok").onclick=async()=>{
+  if(pinBusy)return;const pin=$("pinin").value.trim();
+  if(!pin){$("pinerr").textContent="PIN을 입력해 주세요";return;}
+  pinBusy=true;$("pinok").disabled=true;$("pinerr").textContent="확인 중…";
+  try{
+    const res=await openLive(ME,pin);
+    if(!res||!res.ok){$("pinerr").textContent=(res&&res.error)||"열 수 없어요";$("pinok").disabled=false;pinBusy=false;return;}
+    closePinPrompt();
+    const tool=res.vip?TOOLS.vip:TOOLS.basic;
+    const reward={...res.reward,desc:(ICONMAP[res.reward.name]||{}).desc||"",icon:res.reward.icon||(ICONMAP[res.reward.name]||{}).icon||"🎁"};
+    startSmash(reward,tool,res.pity,true);
+  }catch(e){$("pinerr").textContent="통신 오류 — 잠시 후 다시";$("pinok").disabled=false;}
+  pinBusy=false;
+};
+
+/* ---------- 상자 깨기 연출 ---------- */
+function startSmash(reward,tool,pity,isLive){
+  const ov=$("ov"),stage=$("stage");ov.classList.add("on");let hp=tool.hp;const maxhp=tool.hp;
+  stage.innerHTML=`<div class="smashzone" id="zone"><div class="cracks" id="cracks">💥</div><div class="crate" id="crate">🎁</div></div>
+    <div class="hpbar"><i id="hpfill" style="width:100%"></i></div>
+    <div class="smashtip">${tool.icon} ${tool.name}로 상자를 깨보세요!<small>탭해서 내리치기 (${maxhp}번)</small></div>`;
+  const zone=$("zone"),crate=$("crate"),cracks=$("cracks"),hpfill=$("hpfill");
+  zone.onclick=()=>{hp--;crate.classList.remove("hit");void crate.offsetWidth;crate.classList.add("hit");
+    cracks.style.opacity=(1-hp/maxhp)*0.7;hpfill.style.width=Math.max(0,hp/maxhp*100)+"%";shards(ov,"#caa9ff",8);
+    if(hp<=0){zone.onclick=null;setTimeout(()=>doReveal(reward,pity,tool,isLive),200);}};
+}
+function doReveal(reward,pity,tool,isLive){
+  const ov=$("ov"),stage=$("stage"),color=RC[reward.rarity];shards(ov,color,26);
+  stage.innerHTML=`<div class="reveal" style="--rc:${color}"><div class="ric">${reward.icon}</div>
+    <div class="grade">${RL[reward.rarity].toUpperCase()}</div><div class="rname">${reward.name}</div><div class="rdesc">${reward.desc||""}</div>
+    ${pity?'<div class="pity">🌟 10번째 상자 — 희귀 이상 확정!</div>':''}${tool.luck>1?'<div class="luck">🪓 정회원 도끼 보정 적용됨</div>':''}
+    <button class="closebtn" id="cls">확인 ✨</button></div>`;
+  if(reward.rarity==="legendary"||reward.rarity==="rare"){sparkle(ov,color);if(reward.rarity==="legendary")setTimeout(()=>sparkle(ov,"var(--gold)"),250);}
+  $("cls").onclick=async()=>{
+    ov.classList.remove("on");
+    (histByUser[ME]=histByUser[ME]||[]).unshift(reward);
+    if(isLive){ await fetchState(ME); }                          // 서버(단일 원본)에서 갱신
+    else { if(reward.gems)demoBonus[ME]=(demoBonus[ME]||0)+reward.gems; }
+    renderAll();
+  };
+}
+function sparkle(host,color){for(let i=0;i<22;i++){const s=document.createElement("div");s.className="spark";
+  const a=Math.random()*6.28,d=60+Math.random()*120;s.style.background=Math.random()>.5?color:"#fff";s.style.left="50%";s.style.top="42%";
+  s.style.setProperty("--dx",Math.cos(a)*d+"px");s.style.setProperty("--dy",Math.sin(a)*d+"px");s.style.setProperty("--rot","0deg");
+  s.style.animation=`burst ${0.7+Math.random()*0.6}s ease-out forwards`;host.appendChild(s);setTimeout(()=>s.remove(),1500);}}
+function shards(host,color,n){for(let i=0;i<n;i++){const s=document.createElement("div");s.className="shard";
+  const a=Math.random()*6.28,d=40+Math.random()*90;s.style.background=color;s.style.left="50%";s.style.top="42%";
+  s.style.setProperty("--dx",Math.cos(a)*d+"px");s.style.setProperty("--dy",Math.sin(a)*d+"px");s.style.setProperty("--rot",(Math.random()*720-360)+"deg");
+  s.style.animation=`burst ${0.5+Math.random()*0.4}s ease-out forwards`;host.appendChild(s);setTimeout(()=>s.remove(),1000);}}
+
+/* ---------- 부팅 ---------- */
+async function boot(){
+  let csv=SAMPLE_CSV;
+  if(CSV_URL){try{const r=await fetch(CSV_URL);if(r.ok){csv=await r.text();LIVE_CSV=true;}}catch(e){console.warn("CSV 실패→샘플",e);}}
+  DATA=computeFromCSV(csv);
+  if(!DATA.users[ME])ME=Object.keys(DATA.users)[0]||"열박";
+
+  if(API_URL){const st=await fetchState(ME);if(st&&st.ok)LIVE_API=true;}
+
+  const chip=$("livechip");
+  if(LIVE_API){chip.className="live on";chip.textContent="🟢 라이브 (PIN 상자깨기)";}
+  else if(LIVE_CSV){chip.className="live on";chip.textContent="🟢 라이브 (읽기 전용)";}
+  else{chip.className="live off";chip.textContent=(CSV_URL||API_URL)?"⚠️ 연결 실패 · 샘플":"샘플 데이터";}
+  $("acctsub").textContent=LIVE_API?"보기는 누구나 · 상자깨기는 PIN 필요":"보고 싶은 닉네임을 골라요 (보기는 누구나)";
+  renderAll();
+}
+boot();
+</script>
+</body>
+</html>
